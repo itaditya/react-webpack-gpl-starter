@@ -27,8 +27,7 @@ passport.deserializeUser((id, done) => {
 // callback, including a string that messages why the authentication process failed.
 // This string is provided back to the GraphQL client.
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-  User.findOne({ email: email.toLowerCase() }, (err, user) => {
-    if (err) { return done(err); }
+  User.findOne({ email: email.toLowerCase() }).then(user => {
     if (!user) { return done(null, false, 'Invalid Credentials'); }
     user.comparePassword(password, (err, isMatch) => {
       if (err) { return done(err); }
@@ -37,6 +36,8 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
       }
       return done(null, false, 'Invalid credentials.');
     });
+  }).catch(err => {
+    if (err) { return done(err); }
   });
 }));
 
