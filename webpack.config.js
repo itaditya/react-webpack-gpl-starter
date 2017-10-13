@@ -25,7 +25,8 @@ module.exports = {
       template: 'client/index.html'
     }),
     new PrettierPlugin({
-      semi: false
+      semi: false,
+      singleQuote: true
     })
   ]
 };

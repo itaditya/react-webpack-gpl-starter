@@ -1,11 +1,22 @@
-import React, { Component } from "react"
-import { Link } from "react-router"
-import { graphql } from "react-apollo"
+import React, { Component } from 'react'
+import { Link } from 'react-router'
+import { graphql } from 'react-apollo'
 
-import CurrentUserQuery from "../queries/CurrentUser"
+import CurrentUserQuery from '../queries/CurrentUser'
+import LogoutQuery from '../queries/Logout'
 
 class Header extends Component {
   componentDidMount() {}
+  onLogout() {
+    console.log('test')
+    this.props.mutate({
+      refetchQueries: [
+        {
+          query: CurrentUserQuery
+        }
+      ]
+    })
+  }
   renderContent() {
     console.log(this.props)
     const { loading, user } = this.props.data
@@ -13,18 +24,37 @@ class Header extends Component {
       return <div />
     }
     if (user) {
-      return <div>Logout</div>
+      return (
+        <div>
+          <li>
+            <a onClick={this.onLogout.bind(this)}>Logout</a>
+          </li>
+        </div>
+      )
     } else {
-      return <div>Login</div>
+      return (
+        <div>
+          <li>
+            <Link to="/signup">Signup</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </div>
+      )
     }
   }
   render() {
     return (
       <nav>
-        <Link to="/" className="brand-logo left" />
-        <div className="nav-wrapper">{this.renderContent()}</div>
+        <div className="nav-wrapper">
+          <Link to="/" className="brand-logo left">
+            Home
+          </Link>
+          <ul className="right">{this.renderContent()}</ul>
+        </div>
       </nav>
     )
   }
 }
-export default graphql(CurrentUserQuery)(Header)
+export default graphql(LogoutQuery)(graphql(CurrentUserQuery)(Header))
