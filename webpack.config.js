@@ -1,5 +1,6 @@
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack'),
+  HtmlWebpackPlugin = require('html-webpack-plugin'),
+  PrettierPlugin = require("prettier-webpack-plugin");
 module.exports = {
   entry: './client/index.js',
   output: {
@@ -22,6 +23,9 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'client/index.html'
+    }),
+    new PrettierPlugin({
+      semi: false
     })
   ]
 };
